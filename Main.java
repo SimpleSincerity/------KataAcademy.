@@ -13,7 +13,7 @@ public class Main {
         String userInput = console.nextLine();
         String[] objectOperation = userInput.split(" ");
         String oneNumeral = objectOperation[0], operand = objectOperation[1], twoNumeral = objectOperation[2];
-        testNumerals(oneNumeral, twoNumeral, operand);
+        testNumerals(objectOperation, oneNumeral, twoNumeral, operand);
     }
     
     public static int arabicCalculated(int oneNumeral, int twoNumeral, String operand){
@@ -33,6 +33,19 @@ public class Main {
                 break;
         }
         return result;
+    }
+
+    public static int numberOfOperands(String[] userInput){
+        String[] arrayOperand = new String[]{"+", "-", "*", "/"};
+        int counter = 0;
+        for(String x : userInput){
+            for(String y : arrayOperand){
+                if (x.equals(y)){
+                    counter++;
+                }
+            }
+        }
+        return  counter;
     }
 
     public static String romanCalculated(int oneNumeral, int twoNumeral, String operand){
@@ -65,12 +78,12 @@ public class Main {
         int result = 0;
         StringBuilder stringBuilder = new StringBuilder(input);
         while(!stringBuilder.isEmpty()){
-            if (stringBuilder.indexOf("X") >= 0){
+            if (stringBuilder.indexOf("IX") >= 0){
+                result += 9;
+                stringBuilder.delete(0, 2);
+            }else if (stringBuilder.indexOf("X") >= 0){
                 result += 10;
                 stringBuilder.deleteCharAt(0);
-            }else if (stringBuilder.indexOf("IX") >= 0){
-                result += 9;
-                stringBuilder.delete(0,2);
             }else if (stringBuilder.indexOf("VIII") >= 0){
                 result += 8;
                 stringBuilder.delete(0,4);
@@ -116,6 +129,9 @@ public class Main {
             }else if (x >= 50){
                 result += "L";
                 x -= 50;
+            }else if (x >= 40) {
+                result += "XL";
+                x -= 40;
             }else if (x >= 10){
                 result += "X";
                 x -= 10;
@@ -150,7 +166,7 @@ public class Main {
         }
         return result;
     }
-    public static void testNumerals(String oneNumeral, String twoNumeral, String operand){
+    public static void testNumerals(String[] userInput, String oneNumeral, String twoNumeral, String operand){
         String arabicNumerals = "0123456789", romanNumerals = "IIIIIIIVVVIVIIVIIIIXX";
         char[] arrayOne = oneNumeral.toCharArray(), arrayTwo = twoNumeral.toCharArray();
         String[] arrayOperand = new String[]{"+", "-", "*", "/"};
@@ -183,6 +199,12 @@ public class Main {
                 throw new Exception();
             } catch (Exception exception) {
                 System.out.println("Введен несуществующий в данном калькуляторе операнд!");
+            }
+        }else if (numberOfOperands(userInput) > 1) {
+            try {
+                throw new Exception();
+            } catch (Exception exception) {
+                System.out.println("Введено больше одного операнда, что недопустимо в выражениях данного калькулятора!");
             }
         }else if (arabic && roman){
             try{
